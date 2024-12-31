@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const userSchema = mongoose.Schema(
+const captainSchema = mongoose.Schema(
   {
     fullName: {
       firstName: {
@@ -37,25 +37,59 @@ const userSchema = mongoose.Schema(
     socketId: {
       type: String,
     },
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "inactive",
+    },
+    vehicle: {
+      color: {
+        type: String,
+        required: true,
+        minLength: [3, "Color must be at least 3 chracters long"],
+      },
+      plate: {
+        type: String,
+        required: true,
+        minLength: [3, "plate must be at least 3 chracter long"],
+      },
+      capacity: {
+        type: Number,
+        required: true,
+        min: [1, "capacity must be at least 3 chracter long"],
+      },
+      vehicleType: {
+        type: String,
+        required: true,
+        enum: ["car", "motorcycle", "auto"],
+      },
+    },
+    location: {
+      lat: {
+        type: Number,
+      },
+      lng: {
+        type: Number,
+      },
+    },
   },
   { timestamps: true }
 );
 
-userSchema.methods.generateAuthToken = function () {
+captainSchema.methods.generateAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, {
     expiresIn: "24h",
   });
   return token;
 };
 
-userSchema.methods.comparePassword = async function (password) {
+captainSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-userSchema.statics.hashPassword = async (password) => {
+captainSchema.statics.hashPassword = async function (password) {
   return await bcrypt.hash(password, 10);
 };
 
-const userModel = mongoose.model("user", userSchema);
-
-export default userModel;
+const captainModel = mongoose.model("captainSchema", captainSchema);
+export default captainModel;

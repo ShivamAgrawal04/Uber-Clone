@@ -108,3 +108,56 @@ The request body must be in JSON format and include the following fields:
 
 - Ensure that the server is running and the database is connected before making requests to this endpoint.
 - Use appropriate headers, such as `Content-Type: application/json`, when making the request.
+
+# User Profile Endpoint Documentation
+
+## Endpoint
+
+`GET /api/user/profile`
+
+## Description
+
+This endpoint allows an authenticated user to retrieve their profile information. The user must be logged in and provide a valid token.
+
+## Response Status Codes
+
+- **200 OK**: User profile successfully retrieved. Returns a JSON object containing the user's details.
+- **401 Unauthorized**: Authentication failed due to missing or invalid token.
+- **500 Internal Server Error**: An unexpected error occurred on the server.
+
+### Example Response for Successful Profile Retrieval
+
+```json
+{
+  "fullName": {
+    "firstName": "John",
+    "lastName": "Doe"
+  },
+  "email": "john.doe@example.com"
+}
+```
+
+## Notes
+
+- Ensure that the server is running and the database is connected before making requests to this endpoint.
+- Use appropriate headers, such as `Content-Type: application/json` and `Authorization: Bearer <token>`, when making the request.
+
+# User Logout Endpoint Documentation
+
+## Endpoint
+
+`GET /api/user/logout`
+
+## Description
+
+This endpoint allows an authenticated user to log out. It clears the user's session token and adds it to a blacklist to prevent further use.
+
+## Response Status Codes
+
+- **200 OK**: User successfully logged out.
+- **500 Internal Server Error**: An unexpected error occurred on the server.
+
+## Notes
+
+- Ensure that the server is running and the database is connected before making requests to this endpoint.
+- Use appropriate headers, such as `Content-Type: application/json` and `Authorization: Bearer <token>`, when making the request.
