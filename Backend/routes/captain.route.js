@@ -4,6 +4,7 @@ import {
   loginCaptain,
   registerCaptain,
 } from "../controllers/captain.controller.js";
+import { authCaptain } from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 router.post(
@@ -33,6 +34,6 @@ router.post(
   ],
   registerCaptain
 );
-router.post("/login", loginCaptain);
+router.post("/login", authCaptain, loginCaptain);
 
 export default router;

@@ -47,7 +47,8 @@ The request body must be in JSON format and include the following fields:
       "firstName": "John",
       "lastName": "Doe"
     },
-    "email": "john.doe@example.com"
+    "email": "john.doe@example.com",
+    "password": "hased_password"
   }
 }
 ```
@@ -99,7 +100,8 @@ The request body must be in JSON format and include the following fields:
       "firstName": "John",
       "lastName": "Doe"
     },
-    "email": "john.doe@example.com"
+    "email": "john.doe@example.com",
+    "password": "hased_password"
   }
 }
 ```
@@ -161,3 +163,130 @@ This endpoint allows an authenticated user to log out. It clears the user's sess
 
 - Ensure that the server is running and the database is connected before making requests to this endpoint.
 - Use appropriate headers, such as `Content-Type: application/json` and `Authorization: Bearer <token>`, when making the request.
+
+# Captain Registration Endpoint Documentation
+
+## Endpoint
+
+`POST /api/captain/register`
+
+## Description
+
+This endpoint allows a new captain to register by providing their full name, email, password, and vehicle details. It validates the input data and creates a new captain in the database if the data is valid and the captain does not already exist.
+
+## Required Data
+
+The request body must be in JSON format and include the following fields:
+
+- **fullName**: An object containing:
+  - **firstName**: (String) Required. Must be at least 3 characters long.
+  - **lastName**: (String) Optional. Must be at least 3 characters long.
+- **email**: (String) Required. Must be a valid email address and unique.
+- **password**: (String) Required. Must meet strong password criteria (at least 8 characters, including 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 symbol).
+- **vehicle**: An object containing:
+  - **color**: (String) Required. Must be at least 3 characters long.
+  - **plate**: (String) Required. Must be at least 3 characters long.
+  - **capacity**: (Number) Required. Must be at least 1.
+  - **vehicleType**: (String) Required. Must be one of: car, motorcycle, auto.
+
+### Example Request Body
+
+```json
+{
+  "fullName": {
+    "firstName": "Jane",
+    "lastName": "Doe"
+  },
+  "email": "jane.doe@example.com",
+  "password": "StrongP@ssw0rd",
+  "vehicle": {
+    "color": "Red",
+    "plate": "XYZ123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+## Response Status Codes
+
+- **200 OK**: Captain successfully registered. Returns a JSON object containing the captain's token and details.
+- **400 Bad Request**: Validation errors occurred (e.g., missing fields, invalid email format, password not strong enough, or captain already exists).
+- **500 Internal Server Error**: An unexpected error occurred on the server.
+
+### Example Response for Successful Registration
+
+```json
+{
+  "token": "your_jwt_token_here",
+  "captain": {
+    "fullName": {
+      "firstName": "Jane",
+      "lastName": "Doe"
+    },
+    "email": "jane.doe@example.com",
+    "password": "hased_password",
+    "status": "inactive",
+    "vehicle": {
+      "color": "Red",
+      "plate": "XYZ123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+# Captain Login Endpoint Documentation
+
+## Endpoint
+
+`POST /api/captain/login`
+
+## Description
+
+This endpoint allows an existing captain to log in by providing their email and password. It authenticates the captain and returns a token if the credentials are valid.
+
+## Required Data
+
+The request body must be in JSON format and include the following fields:
+
+- **email**: (String) Required. Must be a valid email address.
+- **password**: (String) Required. The password associated with the captain's account.
+
+### Example Request Body
+
+```json
+{
+  "email": "jane.doe@example.com",
+  "password": "StrongP@ssw0rd"
+}
+```
+
+## Response Status Codes
+
+- **200 OK**: Captain successfully authenticated. Returns a JSON object containing the captain's token and details.
+- **401 Unauthorized**: Authentication failed due to invalid email or password.
+- **500 Internal Server Error**: An unexpected error occurred on the server.
+
+### Example Response for Successful Login
+
+```json
+{
+  "token": "your_jwt_token_here",
+  "captain": {
+    "fullName": {
+      "firstName": "Jane",
+      "lastName": "Doe"
+    },
+    "email": "jane.doe@example.com",
+    "password": "hased_password",
+    "vehicle": {
+      "color": "Red",
+      "plate": "XYZ123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
